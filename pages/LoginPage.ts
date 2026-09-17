@@ -1,10 +1,21 @@
-import { Page, expect } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class LoginPage {
   readonly page: Page;
-  
+  // Declare los locadores como propiedades readonly
+  readonly usernameInput: Locator;
+  readonly passwordInput: Locator;
+  readonly loginButton: Locator;
+  readonly errorMessage: Locator;
+
   constructor(page: Page) {
     this.page = page;
+    // Inicializamos los locadores una sola vez en el constructor.
+    // Usamos getByPlaceholder y getByRole que son más inmunes a cambios de diseño.
+    this.usernameInput = page.getByPlaceholder('Username');
+    this.passwordInput = page.getByPlaceholder('Password');
+    this.loginButton = page.getByRole('button', { name: 'Login' });
+    this.errorMessage = page.locator('[data-test="error"]');
   }
 
   async goto() {
@@ -12,13 +23,12 @@ export class LoginPage {
   }
 
   async login(user: string, pass: string) {
-    await this.page.fill('#user-name', user);
-    await this.page.fill('#password', pass);
-    await this.page.click('#login-button');
+    await this.usernameInput.fill(user);
+    await this.passwordInput.fill(pass);
+    await this.loginButton.click();
   }
 
   async expectErrorVisible() {
-    const errorMessage = this.page.locator('[data-test="error"]');
-    await expect(errorMessage).toBeVisible();
+    await expect(this.errorMessage).toBeVisible();
   }
 }
