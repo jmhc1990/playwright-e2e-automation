@@ -2,9 +2,9 @@ import { test, expect } from './fixtures';
 
 test.describe('Flujo de Catálogo - SauceDemo', () => {
 
-  test.beforeEach(async ({ loginPage, inventoryPage }) => {
-    await loginPage.goto();
-    await loginPage.login('standard_user', 'secret_sauce');
+  test.beforeEach(async ({ inventoryPage }) => {
+    // Entra directamente con la sesión ya cargada por la fixture/setup
+    await inventoryPage.goto();
     await inventoryPage.expectLoaded();
   });
 

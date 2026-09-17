@@ -2,31 +2,29 @@ import { Page, Locator, expect } from '@playwright/test';
 
 export class InventoryPage {
   readonly page: Page;
-  readonly titleHeader: Locator;
-  readonly firstAddButton: Locator;
+  readonly title: Locator;
+  readonly firstAddToCartBtn: Locator;
   readonly shoppingCartBadge: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    // Título principal de la página de productos
-    this.titleHeader = page.locator('.title');
-    // Botón para añadir el primer producto (Sauce Labs Backpack)
-    this.firstAddButton = page.locator('[data-test="add-to-cart-sauce-labs-backpack"]');
-    // Indicador numérico del carrito
+    this.title = page.locator('.title');
+    this.firstAddToCartBtn = page.locator('.inventory_item button').first();
     this.shoppingCartBadge = page.locator('.shopping_cart_badge');
   }
 
-  // Verifica que estamos dentro del inventario
+  async goto() {
+    await this.page.goto('/inventory.html');
+  }
+
   async expectLoaded() {
-    await expect(this.titleHeader).toHaveText('Products');
+    await expect(this.title).toHaveText('Products');
   }
 
-  // Agrega el primer producto
   async addFirstItemToCart() {
-    await this.firstAddButton.click();
+    await this.firstAddToCartBtn.click();
   }
 
-  // Valida el contador de productos del carrito
   async expectCartCount(expectedCount: string) {
     await expect(this.shoppingCartBadge).toHaveText(expectedCount);
   }
