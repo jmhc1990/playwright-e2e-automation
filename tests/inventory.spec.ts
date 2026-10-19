@@ -1,7 +1,6 @@
-import { test, expect } from './fixtures';
+import { test } from './fixtures';
 
 test.describe('Flujo de Catálogo - SauceDemo', () => {
-
   test.beforeEach(async ({ inventoryPage }) => {
     // Entra directamente con la sesión ya cargada por la fixture/setup
     await inventoryPage.goto();
